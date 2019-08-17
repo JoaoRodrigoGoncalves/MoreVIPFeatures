@@ -1,0 +1,67 @@
+"Phrases"
+{
+	"Could not get flag"
+	{
+		"en"	"Could not get the VIP flag."
+		"pt"	"Não foi possível obter a flag de VIP."
+		"pt_p"	"Não foi possível obter a flag de VIP."
+	}
+
+	"%s respawned"
+	{
+		"#format"	"{1:s}"
+		"en"	"{1} respawned!"
+		"pt"	"{1} deu respawn!"
+		"pt_p"	"{1} deu respawn!"
+	}
+
+	"player respawned"
+	{
+		"en"	"A player respawned!"
+		"pt"	"Um jogador deu respawn!"
+		"pt_p"	"Um jogador deu respawn!"
+	}
+
+	"out of respawns"
+	{
+		"#format"	"{1:i}"
+		"en"	"You've used all of your {1} respawns!"
+		"pt"	"Esgotaste todos os teus {1} respawns!"
+		"pt_p"	"Esgotaste todos os teus {1} respawns!"
+	}
+
+	"cannot respawn after round end"
+	{
+		"en"	"You can't respawn after the round has ended!"
+		"pt"	"Não podes dar respawn depois do final de uma ronda!"
+		"pt_p"	"Não podes dar respawn depois do final de uma ronda!"
+	}
+
+	"vipFeature"
+	{
+		"en"	"You can't respawn because it is a VIP feature!"
+		"pt"	"Não podes dar respawn pois esta é uma vantagem VIP!"
+		"pt_p"	"Não podes dar respawn pois esta é uma vantagem VIP!"
+	}
+
+	"respawn disabled"
+	{
+		"en"	"Respawing is disabled on this server."
+		"pt"	"Dar respawn está desativado neste servidor."
+		"pt_p"	"Dar respawn está desativado neste servidor."
+	}
+
+	"respawnAlive"
+	{
+		"en"	"You can't respawn while you're alive!"
+		"pt"	"Não podes dar respawn enquanto estás vivo!"
+		"pt_p"	"Não podes dar respawn enquanto estás vivo!"
+	}
+
+	"vipFeatures"
+	{
+		"en"	"VIP Features"
+		"pt"	"Vantagens VIP"
+		"pt_p"	"Vantagens VIP"
+	}
+}
