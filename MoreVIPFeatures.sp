@@ -38,7 +38,8 @@ char s_ChatTag[128];
 char s_VIPflag[30];
 
 int respawnsLeft[MAXPLAYERS + 1];
-bool canRespawn = true;
+bool b_canRespawn = true;
+bool b_inRound = false;
 
 public Plugin myinfo = 
 {
@@ -85,22 +86,6 @@ public void OnPluginStart()
 	b_grenade = GetConVarBool(c_grenade);
 	b_flashbang = GetConVarBool(c_flashbang);
 	b_smoke = GetConVarBool(c_smoke);
-	
-	PrintToServer("%s", s_VIPflag);
-	PrintToServer("%s", s_ChatTag);
-	PrintToServer("%b", b_enableRespawn);
-	PrintToServer("%i", i_respawns);
-	PrintToServer("%i", i_bonusHealth);
-	PrintToServer("%i", i_MaxHealth);
-	PrintToServer("%b", b_armor);
-	PrintToServer("%b", b_helmet);
-	PrintToServer("%b", b_mediShot);
-	PrintToServer("%b", b_taser);
-	PrintToServer("%b", b_taticalGrenade);
-	PrintToServer("%b", b_grenade);
-	PrintToServer("%b", b_flashbang);
-	PrintToServer("%b", b_smoke);
-	
 	
 	if(StrEqual(s_VIPflag, "a", true))
 	{
@@ -228,10 +213,11 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if((IsClientInGame(client) && (GetClientTeam(client) > 2)))
+	if((IsClientInGame(client)) && (GetClientTeam(client) > 2) && (!b_inRound))
 	{
 		if(IsVIP(client))
-		{			
+		{
+			b_inRound = true;
 			////////
 			if(b_armor)
 			{
@@ -357,12 +343,13 @@ public Action OnPlayerDeath(Handle event, char[] name, bool dontBroadcast)
 
 public void OnRoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
-	canRespawn = true;
+	b_canRespawn = true;
 }
 
 public void OnRoundEnd(Handle event, const char[] name, bool dontBroadcast)
 {
-	canRespawn = false;
+	b_canRespawn = false;
+	b_inRound = false;
 }
 
 public void respawnPlayer(int client)
@@ -375,7 +362,7 @@ public void respawnPlayer(int client)
 			{
 				if(IsVIP(client))
 				{
-					if(canRespawn)
+					if(b_canRespawn)
 					{
 						if(respawnsLeft[client] != 0)
 						{
@@ -384,11 +371,11 @@ public void respawnPlayer(int client)
 							respawnsLeft[client] = respawnsLeft[client] - 1;
 							if(GetClientName(client, clientName, sizeof(clientName)))
 							{
-								PrintHintTextToAll("%t", s_ChatTag, "%s respawned", clientName);
+								PrintHintTextToAll("%t", "%s respawned", clientName);
 							}
 							else
 							{
-								PrintHintTextToAll("%t", s_ChatTag, "player respawned");
+								PrintHintTextToAll("%t", "player respawned");
 							}
 						}
 						else
