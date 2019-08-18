@@ -1,7 +1,5 @@
 #pragma semicolon 1
 
-#define DEBUG
-
 #define PLUGIN_VERSION "1.0"
 
 #include <sourcemod>
@@ -87,6 +85,22 @@ public void OnPluginStart()
 	b_grenade = GetConVarBool(c_grenade);
 	b_flashbang = GetConVarBool(c_flashbang);
 	b_smoke = GetConVarBool(c_smoke);
+	
+	PrintToServer("%s", s_VIPflag);
+	PrintToServer("%s", s_ChatTag);
+	PrintToServer("%b", b_enableRespawn);
+	PrintToServer("%i", i_respawns);
+	PrintToServer("%i", i_bonusHealth);
+	PrintToServer("%i", i_MaxHealth);
+	PrintToServer("%b", b_armor);
+	PrintToServer("%b", b_helmet);
+	PrintToServer("%b", b_mediShot);
+	PrintToServer("%b", b_taser);
+	PrintToServer("%b", b_taticalGrenade);
+	PrintToServer("%b", b_grenade);
+	PrintToServer("%b", b_flashbang);
+	PrintToServer("%b", b_smoke);
+	
 	
 	if(StrEqual(s_VIPflag, "a", true))
 	{
@@ -369,11 +383,11 @@ public void respawnPlayer(int client)
 							respawnsLeft[client] = respawnsLeft[client] - 1;
 							if(GetClientName(client, clientName, sizeof(clientName)))
 							{
-								PrintHintTextToAll("\x04[%s] \x0A%t", s_ChatTag, "%s respawned", clientName);
+								PrintHintTextToAll("%t", s_ChatTag, "%s respawned", clientName);
 							}
 							else
 							{
-								PrintHintTextToAll("\x04[%s] \x0A%t", s_ChatTag, "player respawned");
+								PrintHintTextToAll("%t", s_ChatTag, "player respawned");
 							}
 						}
 						else
