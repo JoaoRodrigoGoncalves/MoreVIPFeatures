@@ -369,36 +369,36 @@ public void respawnPlayer(int client)
 							respawnsLeft[client] = respawnsLeft[client] - 1;
 							if(GetClientName(client, clientName, sizeof(clientName)))
 							{
-								PrintHintTextToAll("\x04[%s] \x0A%t", "%s respawned", s_ChatTag, clientName);
+								PrintHintTextToAll("\x04[%s] \x0A%t", s_ChatTag, "%s respawned", clientName);
 							}
 							else
 							{
-								PrintHintTextToAll("\x04[%s] \x0A%t", "player respawned", s_ChatTag);
+								PrintHintTextToAll("\x04[%s] \x0A%t", s_ChatTag, "player respawned");
 							}
 						}
 						else
 						{
-							PrintToChat(client, "\x04[%s] \x0A%t", "out of respawns", s_ChatTag, i_respawns);
+							PrintToChat(client, "\x04[%s] \x0A%t", s_ChatTag, "out of respawns", i_respawns);
 						}
 					}
 					else
 					{
-						PrintToChat(client, "\x04[%s] \x0A%t", "cannot respawn after round end", s_ChatTag);
+						PrintToChat(client, "\x04[%s] \x0A%t", s_ChatTag, "cannot respawn after round end");
 					}
 				}
 				else
 				{
-					PrintToChat(client, "\x04[%s] \x0A%t", "vipFeature", s_ChatTag);
+					PrintToChat(client, "\x04[%s] \x0A%t", s_ChatTag, "vipFeature");
 				}
 			}
 			else
 			{
-				PrintToChat(client, "\x04[%s] \x0A%T", "respawn disabled", s_ChatTag);
+				PrintToChat(client, "\x04[%s] \x0A%T", s_ChatTag, "respawn disabled");
 			}
 		}
 		else
 		{
-			PrintToChat(client, "\x04[%s] \x0A%t", "respawnAlive", s_ChatTag);
+			PrintToChat(client, "\x04[%s] \x0A%t", s_ChatTag, "respawnAlive");
 		}
 	}
 }
