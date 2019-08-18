@@ -231,14 +231,7 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 	if((IsClientInGame(client) && (GetClientTeam(client) > 2)))
 	{
 		if(IsVIP(client))
-		{
-			/*int iEnt;
-			while ((iEnt = GetPlayerWeaponSlot(client, 3)) != -1)
-			{
-				RemovePlayerItem(client, iEnt);
-				AcceptEntityInput(iEnt, "Kill");
-			}*/
-			
+		{			
 			////////
 			if(b_armor)
 			{
@@ -271,25 +264,14 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			
 			if(b_smoke)
 			{
-				GivePlayerItem(client, "weapon_smokegreande");
+				GivePlayerItem(client, "weapon_smokegrenade");
 			}
-			
-			/*while ((iEnt = GetPlayerWeaponSlot(client, 2)) != -1)
-			{
-				RemovePlayerItem(client, iEnt);
-				AcceptEntityInput(iEnt, "Kill");
-			}*/
-			
-			//GivePlayerItem(client, "weapon_knife");
 			
 			if(b_taser)
 			{
 				GivePlayerItem(client, "weapon_taser");
 			}
 			
-			//FakeClientCommand(client,"use weapon_knife");
-			
-			///////
 		}
 	}
 	
