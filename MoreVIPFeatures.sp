@@ -232,6 +232,13 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 	{
 		if(IsVIP(client))
 		{
+			int iEnt;
+			while ((iEnt = GetPlayerWeaponSlot(client, 3)) != -1)
+			{
+				RemovePlayerItem(client, iEnt);
+				AcceptEntityInput(iEnt, "Kill");
+			}
+			
 			////////
 			if(b_armor)
 			{
@@ -245,11 +252,6 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			if(b_mediShot)
 			{
 				GivePlayerItem(client, "weapon_healthshot");
-			}
-			
-			if(b_taser)
-			{
-				GivePlayerItem(client, "weapon_taser");
 			}
 			
 			if(b_taticalGrenade)
@@ -271,6 +273,21 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			{
 				GivePlayerItem(client, "weapon_smokegreande");
 			}
+			
+			while ((iEnt = GetPlayerWeaponSlot(client, 2)) != -1)
+			{
+				RemovePlayerItem(client, iEnt);
+				AcceptEntityInput(iEnt, "Kill");
+			}
+			
+			GivePlayerItem(client, "weapon_knife");
+			
+			if(b_taser)
+			{
+				GivePlayerItem(client, "weapon_taser");
+			}
+			
+			FakeClientCommand(client,"use weapon_knife");
 			
 			///////
 		}
