@@ -70,7 +70,7 @@ public void OnPluginStart()
 	c_smoke = CreateConVar("MorevipFeatures_flashbang", "1", "Should the player get a flashbang? 0 -> no, 1 -> yes");
 	
 	AutoExecConfig(true, "MoreVIPFeatures");
-	LoadTranslations("MoreVIPFeatures.phrases");
+	LoadTranslations("MoreVIPFeatures.phrases.txt");
 	
 	// Load ConVars to their buffers
 	GetConVarString(c_VIPflag, s_VIPflag, sizeof(s_VIPflag));
