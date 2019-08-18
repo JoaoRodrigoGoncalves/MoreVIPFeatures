@@ -228,16 +228,16 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if((!IsClientInGame(client) && (GetClientTeam(client) > 2)))
+	if((IsClientInGame(client) && (GetClientTeam(client) > 2)))
 	{
 		if(IsVIP(client))
 		{
-			int iEnt;
+			/*int iEnt;
 			while ((iEnt = GetPlayerWeaponSlot(client, 3)) != -1)
 			{
 				RemovePlayerItem(client, iEnt);
 				AcceptEntityInput(iEnt, "Kill");
-			}
+			}*/
 			
 			////////
 			if(b_armor)
@@ -274,20 +274,20 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 				GivePlayerItem(client, "weapon_smokegreande");
 			}
 			
-			while ((iEnt = GetPlayerWeaponSlot(client, 2)) != -1)
+			/*while ((iEnt = GetPlayerWeaponSlot(client, 2)) != -1)
 			{
 				RemovePlayerItem(client, iEnt);
 				AcceptEntityInput(iEnt, "Kill");
-			}
+			}*/
 			
-			GivePlayerItem(client, "weapon_knife");
+			//GivePlayerItem(client, "weapon_knife");
 			
 			if(b_taser)
 			{
 				GivePlayerItem(client, "weapon_taser");
 			}
 			
-			FakeClientCommand(client,"use weapon_knife");
+			//FakeClientCommand(client,"use weapon_knife");
 			
 			///////
 		}
@@ -347,12 +347,14 @@ public Action VipMenu(int client, int agrs)
 	{
 		vipFeatures.AddItem("6", "smoke", ITEMDRAW_DISABLED);
 	}
-
+	
+	vipFeatures.ExitButton = true;
+	vipFeatures.Display(client, 50);
 }
 
 public int VipMenuHandler(Menu menu, MenuAction action, int client, int selection)
 {
-
+	return Plugin_Handled;
 }
 
 public Action OnPlayerDeath(Handle event, char[] name, bool dontBroadcast)
@@ -385,7 +387,7 @@ public void respawnPlayer(int client)
 {
 	if(IsClientInGame(client))
 	{
-		if(!IsPlayerAlive(client))
+		if((!IsPlayerAlive(client))  && (GetClientTeam(client) > 2))
 		{
 			if(b_enableRespawn)
 			{
