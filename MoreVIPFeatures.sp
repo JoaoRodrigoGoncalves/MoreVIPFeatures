@@ -234,7 +234,7 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			
 			if(b_mediShot)
 			{
-				RemovePlayerItem(client, 12);
+				RemovePlayerItem(client, 57);
 				GivePlayerItem(client, "weapon_healthshot");
 			}
 			
