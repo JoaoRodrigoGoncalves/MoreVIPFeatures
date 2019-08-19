@@ -213,7 +213,7 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
 	int client = GetClientOfUserId(GetEventInt(event, "userid"));
 	
-	if((IsClientInGame(client)) && (GetClientTeam(client) > 2) && (!b_inRound))
+	if((IsClientInGame(client)) && (GetClientTeam(client) >= 2) && (!b_inRound))
 	{
 		if(IsVIP(client))
 		{
