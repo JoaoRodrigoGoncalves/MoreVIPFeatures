@@ -217,7 +217,11 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 	{
 		if(IsVIP(client))
 		{
-			b_inRound = true;
+			if (GameRules_GetProp("m_bWarmupPeriod") == 0)
+			{
+				b_inRound = true;
+			}
+
 			////////
 			if(b_armor)
 			{
@@ -230,6 +234,7 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			
 			if(b_mediShot)
 			{
+				RemovePlayerItem(client, 12);
 				GivePlayerItem(client, "weapon_healthshot");
 			}
 			
