@@ -206,6 +206,7 @@ public void OnPluginStart()
 
 public void OnClientPutInServer(int client)
 {
+	b_inRound = false;
 	respawnsLeft[client] = i_respawns;
 }
 
@@ -218,10 +219,6 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 		if(IsVIP(client))
 		{
 			if (GameRules_GetProp("m_bWarmupPeriod") == 0)
-			{
-				b_inRound = false;
-			}
-			else
 			{
 				b_inRound = true;
 			}
