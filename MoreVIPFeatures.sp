@@ -219,6 +219,10 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 		{
 			if (GameRules_GetProp("m_bWarmupPeriod") == 0)
 			{
+				b_inRound = false;
+			}
+			else
+			{
 				b_inRound = true;
 			}
 
@@ -234,7 +238,12 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			
 			if(b_mediShot)
 			{
-				RemovePlayerItem(client, 57);
+				int i_weapon;
+				while ((i_weapon = GetPlayerWeaponSlot(client, 12)) != -1)
+				{
+					RemovePlayerItem(client, i_weapon);
+					AcceptEntityInput(i_weapon, "Kill");
+				}
 				GivePlayerItem(client, "weapon_healthshot");
 			}
 			
