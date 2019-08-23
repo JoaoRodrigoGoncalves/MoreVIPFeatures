@@ -64,4 +64,60 @@
 		"pt"	"Vantagens VIP"
 		"pt_p"	"Vantagens VIP"
 	}
+
+	"armor"
+	{
+		"en"	"Kevlar (Simple)"
+		"pt"	"Kevlar (Simples)"
+		"pt_p"	"Kevlar (Simples)"
+	}
+
+	"armor+helmet"
+	{
+		"en"	"Kevlar + Helmet"
+		"pt"	"Kevlar + Capacete"
+		"pt_p"	"Kevlar + Capacete"
+	}
+
+	"healthShot"
+	{
+		"en"	"Health Shot"
+		"pt"	"Seringa de Vida"
+		"pt_p"	"Seringa de Vida"
+	}
+
+	"taser"
+	{
+		"en"	"Taser"
+		"pt"	"Taser"
+		"pt_p"	"Taser"
+	}
+
+	"TAG"
+	{
+		"en"	"Tactical Awareness Grenade"
+		"pt"	"Granada Tática"
+		"pt_p"	"Granada Tática"
+	}
+
+	"grenade"
+	{
+		"en"	"HE Grenade"
+		"pt"	"Granada HE"
+		"pt_p"	"Granada HE"
+	}
+
+	"flashbang"
+	{
+		"en"	"Flashbang"
+		"pt"	"Flashbang"
+		"pt_p"	"Flashbang"
+	}
+
+	"smokeGrenade"
+	{
+		"en"	"Smoke Grenade"
+		"pt"	"Granada de Fumaça"
+		"pt_p"	"Granada de Fumo"
+	}
 }

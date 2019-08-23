@@ -13,6 +13,7 @@ ConVar c_ChatTag;
 ConVar c_enableRespawn;
 ConVar c_RespawnsPerMap;
 ConVar c_bonusHealth;
+ConVar c_bonusHealthHeadShot;
 ConVar c_MaxHealth;
 ConVar c_armor;
 ConVar c_helmet;
@@ -31,6 +32,7 @@ bool b_mediShot = false;
 bool b_helmet = false;
 bool b_armor = false;
 int i_MaxHealth;
+int i_bonusHealthHeadShot;
 int i_bonusHealth;
 int i_respawns;
 bool b_enableRespawn = false;
@@ -58,6 +60,7 @@ public void OnPluginStart()
 	c_enableRespawn = CreateConVar("MorevipFeatures_respawn", "1", "Enable/disable respawning. 0 -> disabled, 1 -> enabled");
 	c_RespawnsPerMap = CreateConVar("MorevipFeatures_respawns", "5", "Number os respawns per map");
 	c_bonusHealth = CreateConVar("MorevipFeatures_bonusHealth", "10", "Bonus health amount the player gets per kill");
+	c_bonusHealthHeadShot = CreateConVar("MorevipFeatures_bonusHealthHeadShot", "15", "Bonus health amount the player gets per headshot kill");
 	c_MaxHealth = CreateConVar("MorevipFeatures_maxHealth", "150", "Max health the player can have.");
 	c_armor = CreateConVar("MorevipFeatures_armor", "1", "Should the player get armor? 0 -> no, 1 -> yes");
 	c_helmet = CreateConVar("MorevipFeatures_helmet", "1", "Should the player get an helmet? 0 -> no, 1 -> yes");
@@ -77,6 +80,7 @@ public void OnPluginStart()
 	b_enableRespawn = GetConVarBool(c_enableRespawn);
 	i_respawns = GetConVarInt(c_RespawnsPerMap);
 	i_bonusHealth = GetConVarInt(c_bonusHealth);
+	i_bonusHealthHeadShot = GetConVarInt(c_bonusHealthHeadShot);
 	i_MaxHealth = GetConVarInt(c_MaxHealth);
 	b_armor = GetConVarBool(c_armor);
 	b_helmet = GetConVarBool(c_helmet);
@@ -86,6 +90,27 @@ public void OnPluginStart()
 	b_grenade = GetConVarBool(c_grenade);
 	b_flashbang = GetConVarBool(c_flashbang);
 	b_smoke = GetConVarBool(c_smoke);
+	
+	
+	//ammo_grenade_limit_total
+	int i_grenadeSlotsNeeded = 0;
+	int i_grenadeSlots;
+	ConVar h_grenadeSlots;
+	
+	h_grenadeSlots = FindConVar("ammo_grenade_limit_total");
+	i_grenadeSlots = GetConVarInt(h_grenadeSlots);
+	
+	b_taticalGrenade ? i_grenadeSlotsNeeded++ : false;
+	b_grenade ? i_grenadeSlotsNeeded++ : false;
+	b_flashbang ? i_grenadeSlotsNeeded++ : false;
+	b_smoke ? i_grenadeSlotsNeeded++ : false;
+	
+	
+	if(i_grenadeSlots < i_grenadeSlotsNeeded)
+	{
+		h_grenadeSlots.IntValue = i_grenadeSlotsNeeded;
+	}
+	
 	
 	if(StrEqual(s_VIPflag, "a", true))
 	{
@@ -204,6 +229,31 @@ public void OnPluginStart()
 	HookEvent("round_end", OnRoundEnd);
 }
 
+stock bool HasWeapon(int client, const char[] weapon) 
+{ 
+    int length = GetEntPropArraySize(client, Prop_Send, "m_hMyWeapons");  
+      
+    for (int i= 0; i < length; i++)   
+    {   
+        int item = GetEntPropEnt(client, Prop_Send, "m_hMyWeapons", i);   
+
+        if (item != -1)   
+        {   
+            char classname[64];  
+             
+            if (GetEntityClassname(item, classname, sizeof(classname))) 
+            { 
+                if (StrEqual(weapon, classname, false)) 
+                { 
+                    return true; 
+                } 
+            } 
+        }   
+    }  
+
+    return false; 
+}
+
 public void OnClientPutInServer(int client)
 {
 	b_inRound = false;
@@ -235,40 +285,51 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			
 			if(b_mediShot)
 			{
-				int i_weapon;
-				while ((i_weapon = GetPlayerWeaponSlot(client, 12)) != -1)
+				if(!HasWeapon(client,"weapon_healthshot"))
 				{
-					RemovePlayerItem(client, i_weapon);
-					AcceptEntityInput(i_weapon, "Kill");
+					GivePlayerItem(client, "weapon_healthshot");
 				}
-				GivePlayerItem(client, "weapon_healthshot");
 			}
 			
 			if(b_taticalGrenade)
 			{
-				GivePlayerItem(client, "weapon_tagrenade");
+				if(!HasWeapon(client, "weapon_tagrenade"))
+				{
+					GivePlayerItem(client, "weapon_tagrenade");
+				}
 			}
 			
 			if(b_grenade)
 			{
-				GivePlayerItem(client, "weapon_hegrenade");
+				if(!HasWeapon(client, "weapon_hegrenade"))
+				{
+					GivePlayerItem(client, "weapon_hegrenade");
+				}
 			}
 			
 			if(b_flashbang)
 			{
-				GivePlayerItem(client, "weapon_flashbang");
+				if(!HasWeapon(client, "weapon_flashbang"))
+				{
+					GivePlayerItem(client, "weapon_flashbang");
+				}
 			}
 			
 			if(b_smoke)
 			{
-				GivePlayerItem(client, "weapon_smokegrenade");
+				if(!HasWeapon(client, "weapon_smokegrenade"))
+				{
+					GivePlayerItem(client, "weapon_smokegrenade");
+				}
 			}
 			
 			if(b_taser)
 			{
-				GivePlayerItem(client, "weapon_taser");
-			}
-			
+				if(!HasWeapon(client, "weapon_taser"))
+				{
+					GivePlayerItem(client, "weapon_taser");
+				}
+			}			
 		}
 	}
 	
@@ -285,46 +346,64 @@ public Action VipMenu(int client, int agrs)
 	Menu vipFeatures = new Menu(VipMenuHandler);
 	vipFeatures.SetTitle("%t", "vipFeatures");
 	
+	char armor[100];
+	char helmet[100];
+	char mediShot[100];
+	char taser[100];
+	char taticalGrenade[100];
+	char grenade[100];
+	char flashbang[100];
+	char smokeGrenade[100];
+	
+	Format(armor, sizeof(armor), "%t", "armor");
+	Format(helmet, sizeof(helmet), "%t", "armor+helmet");
+	Format(mediShot, sizeof(mediShot), "%t", "healthShot");
+	Format(taser, sizeof(taser), "%t", "taser");
+	Format(taticalGrenade, sizeof(taticalGrenade), "%t", "TAG");
+	Format(grenade, sizeof(grenade), "%t", "grenade");
+	Format(flashbang, sizeof(flashbang), "%t", "flashbang");
+	Format(smokeGrenade, sizeof(smokeGrenade), "%t", "smokeGrenade");
+	
 	if(b_armor)
 	{
 		if(b_helmet)
 		{
-			vipFeatures.AddItem("0", "kev + helmet", ITEMDRAW_DISABLED);
+			vipFeatures.AddItem("0", helmet, ITEMDRAW_DISABLED);
 		}
 		else
 		{
-			vipFeatures.AddItem("0", "kev", ITEMDRAW_DISABLED);
+			vipFeatures.AddItem("0", armor, ITEMDRAW_DISABLED);
 		}
 	}
 	
 	if(b_mediShot)
 	{
-		vipFeatures.AddItem("1", "Health Shot", ITEMDRAW_DISABLED);
+		vipFeatures.AddItem("1", mediShot, ITEMDRAW_DISABLED);
 	}
 	
 	if(b_taser)
 	{
-		vipFeatures.AddItem("2", "Taser", ITEMDRAW_DISABLED);
+		vipFeatures.AddItem("2", taser, ITEMDRAW_DISABLED);
 	}
 	
 	if(b_taticalGrenade)
 	{
-		vipFeatures.AddItem("3", "TAG", ITEMDRAW_DISABLED);
+		vipFeatures.AddItem("3", taticalGrenade, ITEMDRAW_DISABLED);
 	}
 	
 	if(b_grenade)
 	{
-		vipFeatures.AddItem("4", "he grenade", ITEMDRAW_DISABLED);
+		vipFeatures.AddItem("4", grenade, ITEMDRAW_DISABLED);
 	}
 	
 	if(b_flashbang)
 	{
-		vipFeatures.AddItem("5", "flashbang", ITEMDRAW_DISABLED);
+		vipFeatures.AddItem("5", flashbang, ITEMDRAW_DISABLED);
 	}
 	
 	if(b_smoke)
 	{
-		vipFeatures.AddItem("6", "smoke", ITEMDRAW_DISABLED);
+		vipFeatures.AddItem("6", smokeGrenade, ITEMDRAW_DISABLED);
 	}
 	
 	vipFeatures.ExitButton = true;
@@ -342,11 +421,29 @@ public Action OnPlayerDeath(Handle event, char[] name, bool dontBroadcast)
 	if (IsVIP(attacker))
 	{
 		int health = GetEntProp(attacker, Prop_Send, "m_iHealth");
-		health = health + i_bonusHealth;
-		SetEntityHealth(attacker, health);
-		if(health > i_MaxHealth)
+		if(GetEventBool(event, "headshot"))
 		{
-			SetEntityHealth(attacker, i_MaxHealth);
+			health = health + i_bonusHealthHeadShot;
+			if(health > i_MaxHealth)
+			{
+				SetEntityHealth(attacker, i_MaxHealth);
+			}
+			else
+			{
+				SetEntityHealth(attacker, health);
+			}
+		}
+		else
+		{
+			health = health + i_bonusHealth;
+			if(health > i_MaxHealth)
+			{
+				SetEntityHealth(attacker, i_MaxHealth);
+			}
+			else
+			{
+				SetEntityHealth(attacker, health);
+			}
 		}
 	}
 	return Plugin_Continue;
@@ -367,7 +464,7 @@ public void respawnPlayer(int client)
 {
 	if(IsClientInGame(client))
 	{
-		if((!IsPlayerAlive(client))  && (GetClientTeam(client) > 2))
+		if((!IsPlayerAlive(client))  && (GetClientTeam(client) >= 2))
 		{
 			if(b_enableRespawn)
 			{
