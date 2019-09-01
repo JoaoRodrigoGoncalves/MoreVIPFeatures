@@ -1,10 +1,27 @@
 # MoreVIPFeatures
 
 A plugin that adds more VIP features!
-With this plugin you can:
- - Costumize how much health the VIP player should get for killing an enemy with and without an headshot
- - Costumize which grenades and other features should be given to a VIP player
 
+Almost every feature is customizable!
+
+## Features Available
+
+* Grenades
+	* Smoke
+	* Flashbang
+	* HE grenade
+	* Tatical Grenade
+* Taser
+* MediShot
+* Enable respawning
+	* Max respawns per map
+* Armor
+	* Kev
+	* Kev + Helmet
+* Health Bonus per kill
+	* Health Bonus on a normal kill
+	* Health Bonus on a headshot kill
+	* Max health that a player can have
 
 
 ## TO-DO
