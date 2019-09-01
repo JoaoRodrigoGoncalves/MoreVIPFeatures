@@ -11,13 +11,18 @@ Almost every feature is customizable!
 	* Flashbang
 	* HE grenade
 	* Tatical Grenade
+
 * Taser
+
 * MediShot
+
 * Enable respawning
 	* Max respawns per map
+
 * Armor
 	* Kev
 	* Kev + Helmet
+
 * Health Bonus per kill
 	* Health Bonus on a normal kill
 	* Health Bonus on a headshot kill
