@@ -1,12 +1,5 @@
 "Phrases"
 {
-	"Could not get flag"
-	{
-		"en"	"Could not get the VIP flag."
-		"pt"	"Não foi possível obter a flag de VIP."
-		"pt_p"	"Não foi possível obter a flag de VIP."
-	}
-
 	"%s respawned"
 	{
 		"#format"	"{1:s}"

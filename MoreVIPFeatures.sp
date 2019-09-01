@@ -8,7 +8,6 @@
 
 #pragma newdecls required
 
-ConVar c_VIPflag;
 ConVar c_ChatTag;
 ConVar c_enableRespawn;
 ConVar c_RespawnsPerMap;
@@ -37,7 +36,6 @@ int i_bonusHealth;
 int i_respawns;
 bool b_enableRespawn = false;
 char s_ChatTag[128];
-char s_VIPflag[30];
 
 int respawnsLeft[MAXPLAYERS + 1];
 bool b_canRespawn = true;
@@ -55,7 +53,6 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	CreateConVar("MorevipFeatures_version", PLUGIN_VERSION, "MoreVIPFeatures version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
-	c_VIPflag = CreateConVar("MorevipFeatures_flag", "o", "The VIP flag needed to get the VIP Features");
 	c_ChatTag = CreateConVar("MorevipFeatures_chatTag", "MoreVIPFeatures", "The used to be displayed on the chat. Eg. [MoreVIPFeatures] Test message");
 	c_enableRespawn = CreateConVar("MorevipFeatures_respawn", "1", "Enable/disable respawning. 0 -> disabled, 1 -> enabled");
 	c_RespawnsPerMap = CreateConVar("MorevipFeatures_respawns", "5", "Number os respawns per map");
@@ -75,7 +72,6 @@ public void OnPluginStart()
 	LoadTranslations("MoreVIPFeatures.phrases.txt");
 	
 	// Load ConVars to their buffers
-	GetConVarString(c_VIPflag, s_VIPflag, sizeof(s_VIPflag));
 	GetConVarString(c_ChatTag, s_ChatTag, sizeof(s_ChatTag));
 	b_enableRespawn = GetConVarBool(c_enableRespawn);
 	i_respawns = GetConVarInt(c_RespawnsPerMap);
@@ -111,116 +107,8 @@ public void OnPluginStart()
 		h_grenadeSlots.IntValue = i_grenadeSlotsNeeded;
 	}
 	
-	
-	if(StrEqual(s_VIPflag, "a", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_RESERVATION);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_RESERVATION);
-	}
-	else if (StrEqual(s_VIPflag, "b", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_GENERIC);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_GENERIC);
-	}
-	else if (StrEqual(s_VIPflag, "c", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_KICK);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_KICK);
-	}
-	else if (StrEqual(s_VIPflag, "d", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_BAN);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_BAN);
-	}
-	else if (StrEqual(s_VIPflag, "e", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_UNBAN);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_UNBAN);
-	}
-	else if (StrEqual(s_VIPflag, "f", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_SLAY);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_SLAY);
-	}
-	else if (StrEqual(s_VIPflag, "g", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CHANGEMAP);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CHANGEMAP);
-	}
-	else if (StrEqual(s_VIPflag, "h", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CONVARS);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CONVARS);
-	}
-	else if (StrEqual(s_VIPflag, "i", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CONFIG);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CONFIG);
-	}
-	else if (StrEqual(s_VIPflag, "j", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CHAT);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CHAT);
-	}
-	else if (StrEqual(s_VIPflag, "k", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_VOTE);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_VOTE);
-	}
-	else if (StrEqual(s_VIPflag, "l", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_PASSWORD);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_PASSWORD);
-	}
-	else if (StrEqual(s_VIPflag, "m", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_RCON);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_RCON);
-	}
-	else if (StrEqual(s_VIPflag, "n", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CHEATS);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CHEATS);
-	}
-	else if (StrEqual(s_VIPflag, "z", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_ROOT);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_ROOT);
-	}
-	else if (StrEqual(s_VIPflag, "o", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM1);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM1);
-	}
-	else if (StrEqual(s_VIPflag, "p", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM2);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM2);
-	}
-	else if (StrEqual(s_VIPflag, "q", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM3);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM3);
-	}
-	else if (StrEqual(s_VIPflag, "r", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM4);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM4);
-	}
-	else if (StrEqual(s_VIPflag, "s", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM5);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM5);
-	}
-	else if (StrEqual(s_VIPflag, "t", true))
-	{
-		RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM6);
-		RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM6);
-	}
-	else
-	{
-		SetFailState("[MoreVIPFeatures] %t", "Could not get flag");
-	}
+	RegConsoleCmd("sm_vipmenu", VipMenu, "", ADMFLAG_CUSTOM1);
+	RegConsoleCmd("sm_vipspawn", vipSpawn, "", ADMFLAG_CUSTOM1);
 	
 	/////////////////// HOOKS /////////////////////////
 	HookEvent("player_spawn", OnPlayerSpawn);
@@ -515,5 +403,5 @@ public void respawnPlayer(int client)
 
 public bool IsVIP(int client)
 {
-	return CheckCommandAccess(client, "sm_vipmenu", ReadFlagString(s_VIPflag)) ? true : false;
+	return CheckCommandAccess(client, "sm_vipmenu", ADMFLAG_CUSTOM1) ? true : false;
 }
