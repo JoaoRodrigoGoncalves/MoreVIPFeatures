@@ -32,3 +32,4 @@ Almost every feature is customizable!
 ## TO-DO
  
  - Option to costumize the VIP flag (for now use the [Command Override System](https://wiki.alliedmods.net/Overriding_Command_Access_(SourceMod)) provided by sourcemod)
+ 
