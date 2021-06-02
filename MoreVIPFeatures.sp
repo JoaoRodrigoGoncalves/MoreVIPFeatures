@@ -1,6 +1,6 @@
 #pragma semicolon 1
 
-#define PLUGIN_VERSION "1.0"
+#define PLUGIN_VERSION "1.1.0"
 
 #include <sourcemod>
 #include <sdktools>
@@ -34,6 +34,7 @@ int i_MaxHealth;
 int i_bonusHealthHeadShot;
 int i_bonusHealth;
 int i_respawns;
+int i_grenadeSlotsNeeded = 0;
 bool b_enableRespawn = false;
 char s_ChatTag[128];
 
@@ -47,7 +48,7 @@ public Plugin myinfo =
 	author = "JoaoRodrigoGamer",
 	description = "More in-game features for VIP players",
 	version = PLUGIN_VERSION,
-	url = "https://joaogoncalves.myftp.org/"
+	url = "https://joaogoncalves.eu/"
 };
 
 public void OnPluginStart()
@@ -86,29 +87,19 @@ public void OnPluginStart()
 	b_grenade = GetConVarBool(c_grenade);
 	b_flashbang = GetConVarBool(c_flashbang);
 	b_smoke = GetConVarBool(c_smoke);
-	
-	
-	//ammo_grenade_limit_total
-	int i_grenadeSlotsNeeded = 0;
-	int i_grenadeSlots;
-	ConVar h_grenadeSlots;
-	
-	h_grenadeSlots = FindConVar("ammo_grenade_limit_total");
-	i_grenadeSlots = GetConVarInt(h_grenadeSlots);
-	
+		
 	b_taticalGrenade ? i_grenadeSlotsNeeded++ : false;
 	b_grenade ? i_grenadeSlotsNeeded++ : false;
 	b_flashbang ? i_grenadeSlotsNeeded++ : false;
 	b_smoke ? i_grenadeSlotsNeeded++ : false;
 	
-	
-	if(i_grenadeSlots < i_grenadeSlotsNeeded)
+	if(FindConVar("ammo_grenade_limit_total").IntValue < i_grenadeSlotsNeeded)
 	{
-		h_grenadeSlots.IntValue = i_grenadeSlotsNeeded;
+		FindConVar("ammo_grenade_limit_total").IntValue = i_grenadeSlotsNeeded;
 	}
-	
-	RegConsoleCmd("sm_vipmenu", VipMenu, "", ADMFLAG_CUSTOM1);
-	RegConsoleCmd("sm_vipspawn", vipSpawn, "", ADMFLAG_CUSTOM1);
+
+	RegAdminCmd("sm_vipmenu", VipMenu, ADMFLAG_CUSTOM1, "Open Vip Menu");
+	RegAdminCmd("sm_vipspawn", vipSpawn, ADMFLAG_CUSTOM1, "Respawn");
 	
 	/////////////////// HOOKS /////////////////////////
 	HookEvent("player_spawn", OnPlayerSpawn);
@@ -220,7 +211,6 @@ public void OnPlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 			}			
 		}
 	}
-	
 }
 
 public Action vipSpawn(int client, int args)
@@ -339,6 +329,8 @@ public Action OnPlayerDeath(Handle event, char[] name, bool dontBroadcast)
 
 public void OnRoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
+	// Just to be sure that the grenade slots are kept between rounds
+	FindConVar("ammo_grenade_limit_total").IntValue = i_grenadeSlotsNeeded;
 	b_canRespawn = true;
 }
 
@@ -403,5 +395,5 @@ public void respawnPlayer(int client)
 
 public bool IsVIP(int client)
 {
-	return CheckCommandAccess(client, "sm_vipmenu", ADMFLAG_CUSTOM1) ? true : false;
+	return CheckCommandAccess(client, "sm_vipmenu", ADMFLAG_CUSTOM1);
 }
