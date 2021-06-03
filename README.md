@@ -4,6 +4,8 @@ A plugin that adds more VIP features!
 
 Almost every feature is customizable!
 
+VIP Flag: o
+
 ## Features Available
 
 * Grenades
